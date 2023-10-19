@@ -37,6 +37,12 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/cart', async (req, res) => {
+            const cursor = cartCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         app.get('/company/:id', async (req, res) => {
             const id = req.params.id;
             const query = { companyName: id };

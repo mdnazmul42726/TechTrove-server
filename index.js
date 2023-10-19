@@ -58,6 +58,13 @@ async function run() {
             res.send(result);
         });
 
+        app.get('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await companyCollection.findOne(query);
+            res.send(result);
+        })
+
         app.post('/product', async (req, res) => {
             const product = req.body;
             const result = await companyCollection.insertOne(product);
@@ -70,6 +77,20 @@ async function run() {
             res.send(result);
 
         });
+
+        app.put('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedData = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const option = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    photoUrl: updatedData.photoUrl, price: updatedData.price, productName: updatedData.productName, companyName: updatedData.companyName, category: updatedData.category, rating: updatedData.rating, description: updatedData.description
+                }
+            };
+            const result = await companyCollection.updateOne(filter, updatedDoc, option)
+            res.send(result)
+        })
 
         app.delete('/cart/:id', async (req, res) => {
             const id = req.params.id;

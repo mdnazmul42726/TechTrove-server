@@ -29,6 +29,7 @@ async function run() {
         await client.connect();
 
         const companyCollection = client.db("AtenDB").collection("company");
+        const cartCollection = client.db("AtenDB").collection("cart");
 
         app.get('/brands', async (req, res) => {
             const cursor = companyCollection.find();
@@ -56,6 +57,13 @@ async function run() {
             const result = await companyCollection.insertOne(product);
             res.send(result);
         });
+
+        app.post('/cart', async (req, res) => {
+            const cartDoc = req.body;
+            const result = await cartCollection.insertOne(cartDoc)
+            res.send(result);
+
+        })
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
